@@ -30,7 +30,7 @@ public:
 
     bool isPositive() const;
 
-    Natural abs();
+    Natural abs() const;
 
     //Invert number
     Integer operator-();
@@ -51,7 +51,9 @@ public:
 
     Integer operator-(Integer const &other);
 
-    Integer operator*(Integer const &other);
+    Integer operator*(Integer const &other) const;
+
+    Integer operator*(Natural const &other) const;
 
     Integer operator/(Integer const &other);
 

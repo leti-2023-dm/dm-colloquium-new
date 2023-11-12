@@ -26,7 +26,7 @@ Integer::Integer(Integer &&num) noexcept = default;
 Integer::Integer(const Integer &num) = default;
 
 
-Natural Integer::abs() {
+Natural Integer::abs() const {
     return natural;
 }
 
@@ -79,8 +79,12 @@ Integer Integer::operator-(const Integer &other) {
     return (*this) + (-newOther);
 }
 
-Integer Integer::operator*(const Integer &other) {
+Integer Integer::operator*(const Integer &other) const {
     return Integer(natural * other.natural, sign != other.sign);
+}
+
+Integer Integer::operator*(const Natural &other) const {
+    return (*this) * Integer(other);
 }
 
 Integer Integer::operator/(const Integer &other) {
