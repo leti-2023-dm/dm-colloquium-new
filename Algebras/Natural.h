@@ -6,7 +6,7 @@
 
 
 class Natural {
-private:
+protected:
     std::vector<int> number; // is reversed
     void delete_starting_zeroes();
 

@@ -233,7 +233,7 @@ Natural Natural::operator*(const Natural &other) const{
     }
     for (size_t i = 0; i < b.size(); ++i) {
         Natural a1 = a * b[i];
-        a1.mul_nk(i);
+        a1 = a1.mul_nk(i);
         res = res + a1;
     }
     return res;
@@ -277,14 +277,11 @@ Natural Natural::operator/(const Natural &other) const {
     while(tmp >= other){
         Natural div_res = tmp.div_nn_dk(other);
         res.push_front_digit(div_res[div_res.size() - 1]);
-        tmp = tmp - other * div_res;
+        tmp = tmp - (other * div_res);
     }
     return res;
 }
 
 Natural Natural::operator%(const Natural &other) const {
-    return (*this) - other * ((*this) / other);
+    return (*this) - (other * ((*this) / other));
 }
-
-
-
