@@ -1,12 +1,12 @@
 #include "Rational.h"
 
-#include <utility>
+
+
 
 Rational::Rational()
         : numerator(0),
           denominator(1) {}
 
-//TODO: reduce it
 Rational::Rational(const Integer &numerator, const Natural &denominator)
         : numerator(numerator),
           denominator(denominator) {
@@ -14,6 +14,7 @@ Rational::Rational(const Integer &numerator, const Natural &denominator)
         throw std::invalid_argument("Denominator can't be zero");
     if (numerator == 0)
         this->denominator = 1;
+    this->reduce();
 }
 
 Rational::Rational(const Rational &num) = default;
@@ -22,6 +23,23 @@ Rational::Rational(Rational &&num) noexcept = default;
 
 Rational::Rational(const std::string &num) {
     // number 1242.222
+    size_t i = num.find('/');
+    if (i != std::string::npos){
+        numerator = Integer(num.substr(0, i));
+        denominator = Natural(num.substr(i + 1, num.size() - i - 1));
+        this->reduce();
+        return;
+    }
+    i = num.find('.');
+    if (i != std::string::npos){
+        unsigned long long k = num.size() - i - 1;
+        denominator = Natural(1).mul_nk(k);
+        std::string tmp = num.substr(0, i) + num.substr(i + 1, num.size() - i - 1);
+        numerator = Integer(tmp);
+        this->reduce();
+        return;
+    }
+    (*this) = Rational(Integer(num));
 }
 
 Rational::Rational(Integer numerator)
@@ -73,7 +91,6 @@ bool Rational::operator<=(const Rational &other) const {
 Rational Rational::operator+(const Rational &other) const {
     auto newNumerator1 = Integer(other.denominator) * numerator;
     auto newNumerator2 = Integer(denominator) * other.numerator;
-
     return {newNumerator1 + newNumerator2, denominator * other.denominator};
 }
 
@@ -100,6 +117,18 @@ std::ostream &operator<<(std::ostream &stream, const Rational &num) {
     stream << num.numerator;
     if (num.denominator != 1) stream << '/' << num.denominator;
     return stream;
+}
+
+void Rational::reduce() {
+    bool sign = !numerator.isPositive();
+    Natural new_num = numerator.abs();
+    Natural gcf = gcf_nn_n(new_num, denominator);
+    this->numerator = Integer(new_num / gcf, sign);
+    this->denominator = denominator / gcf;
+}
+
+Rational::Rational(const double& num) {
+    (*this) = Rational(std::to_string(num));
 }
 
 

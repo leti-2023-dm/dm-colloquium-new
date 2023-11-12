@@ -1,4 +1,4 @@
-#ifndef COLOQ_MY_TRY_NATURALM_H
+#ifndef COLOQ_MY_TRY_NATURAL_H
 #define COLOQ_MY_TRY_NATURAL_H
 
 #include <vector>

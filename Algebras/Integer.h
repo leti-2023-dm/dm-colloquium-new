@@ -1,7 +1,7 @@
 #ifndef DM_COLLOQUIUM_NEW_INTEGER_H
 #define DM_COLLOQUIUM_NEW_INTEGER_H
 
-#include "Natural.h"
+#include "../Modules/modnat.h"
 
 class Integer {
 private:

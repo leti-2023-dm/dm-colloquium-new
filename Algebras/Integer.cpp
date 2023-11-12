@@ -12,9 +12,13 @@ Integer::Integer(Natural num, bool sign)
 Integer::Integer(const Natural &num)
         : Integer(num, false) {}
 
-Integer::Integer(const std::string &num)
-        : natural(num.substr(1)),
-          sign(num.at(0) == '-') {}
+Integer::Integer(const std::string &num): sign(num.at(0) == '-') {
+    if (isdigit(num.at(0))){
+        natural = Natural(num);
+        return;
+    }
+    natural = Natural(num.substr(1));
+}
 
 Integer::Integer(long int num)
         : sign(num < 0),
