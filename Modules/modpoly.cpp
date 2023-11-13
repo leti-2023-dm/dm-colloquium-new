@@ -1,4 +1,5 @@
 #include "modpoly.h"
+#include "modrat.h"
 
 Polynomial add_pp_p(Polynomial& pol1, Polynomial& pol2){
     return pol1 + pol2;
@@ -56,9 +57,10 @@ Polynomial nmr_p_p(Polynomial& pol){
     return pol / gcf_pp_p(pol, deriv);
 }
 
-Rational solve_pq_q(Polynomial& pol){
+Rational solve_pq_q(Polynomial& pol, Rational& val){
     Rational res = 0;
     for (int i = 0; i < pol.size(); ++i) {
-        
+        res = res + pol[i] * pow_qn_q(val, i);
     }
+    return res;
 }

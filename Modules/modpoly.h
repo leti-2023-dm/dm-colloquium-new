@@ -28,7 +28,7 @@ Polynomial der_p_p(Polynomial& pol);
 
 Polynomial nmr_p_p(Polynomial& pol);
 
-Rational solve_pq_q(Polynomial& pol, Rational& val;);
+Rational solve_pq_q(Polynomial& pol, Rational& val);
 
 
 #endif //COLOQ_MY_TRY_MODPOLY_H
