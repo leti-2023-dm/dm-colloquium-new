@@ -1,5 +1,6 @@
-#ifndef COLOQ_MY_TRY_POLYNOMIAL_H
-#define COLOQ_MY_TRY_POLYNOMIAL_H
+
+#ifndef COLOQ_POLYNOMIAL_H
+#define COLOQ_POLYNOMIAL_H
 #include "Rational.h"
 
 class Polynomial {
@@ -15,6 +16,7 @@ public:
     Polynomial(Polynomial&& polynimial) = default;
 
     Polynomial();
+
 
     Polynomial(const Rational& num, size_t deg = 0);
 
@@ -38,15 +40,18 @@ public:
 
     size_t size() const;
 
+
     size_t degre() const;
 
     Rational fac_p() const;
 
     Polynomial div_pp_qxk(const Polynomial& other) const;
 
+
     Polynomial operator/(const Polynomial& other) const;
 
     Polynomial operator%(const Polynomial& other) const;
+
 
     bool operator == (const Polynomial& other) const;
 
@@ -54,8 +59,14 @@ public:
 
     Polynomial derivative() const;
 
+    friend std::ostream &operator<<(std::ostream &stream, const Polynomial &p);
+
+
+
     void delete_leading_zeroes();
 };
 
 
-#endif //COLOQ_MY_TRY_POLYNOMIAL_H
+
+#endif //COLOQ_POLYNIMIAL_H
+

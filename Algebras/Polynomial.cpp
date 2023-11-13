@@ -17,6 +17,7 @@ Polynomial::Polynomial() {
     (*this) = Polynomial(Rational(0));
 }
 
+
 Polynomial::Polynomial(const Rational& num, size_t deg) {
     while (coefficients.size() <= deg)
         coefficients.insert(coefficients.begin(), 0);
@@ -88,6 +89,7 @@ size_t Polynomial::size() const {
 }
 
 Rational Polynomial::fac_p() const {
+
     Natural numerator = coefficients[0].getNumerator().abs();
     bool numer_sign = !coefficients[0].getNumerator().isPositive();
     Natural denominator = coefficients[0].getDenominator();
@@ -122,6 +124,7 @@ Polynomial Polynomial::derivative() const {
     }
     res.coefficients.erase(res.coefficients.begin());
     return res;
+
 }
 
 Polynomial &Polynomial::operator=(const Polynomial &other) {
@@ -145,6 +148,7 @@ void Polynomial::delete_leading_zeroes() {
         this->coefficients.pop_back();
 }
 
+
 Polynomial Polynomial::div_pp_qxk(const Polynomial &other) const {
     Polynomial res = Polynomial(coefficients[coefficients.size() - 1] / other[other.size() - 1], this->size() - other.size());
     return res;
@@ -167,3 +171,27 @@ bool Polynomial::operator==(const Polynomial &other) const {
 bool Polynomial::operator!=(const Polynomial &other) const {
     return !((*this) == other);
 }
+
+std::ostream &operator<<(std::ostream &stream, const Polynomial &p) {
+    auto deg = p.coefficients.size() - 1;
+    for (size_t ind = 0; ind <= deg; ind++) {
+        const Rational& coefficient = p.coefficients[deg - ind];
+        const Integer& numerator = coefficient.getNumerator();
+        auto isNegative = !numerator.isPositive();
+
+        // we don't output monomials with zero coefficients
+        if(numerator.abs().size() == 1 && numerator[0] == 0) continue;
+
+        if (isNegative) stream << '(';
+        stream << coefficient;
+        if (isNegative) stream << ')';
+
+        if (deg - ind != 0)
+            stream << " * x^" << std::to_string(deg - ind) << " + ";
+    }
+
+    return stream;
+}
+
+
+
