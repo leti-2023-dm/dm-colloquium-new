@@ -18,9 +18,13 @@ public:
 
     Rational(const std::string &num);
 
+    Rational(const double& num);
+
     Rational(const Rational &num);
 
     Rational(Rational &&num) noexcept;
+
+    void reduce();
 
     Rational operator-();
 

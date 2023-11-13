@@ -13,8 +13,8 @@ Integer::Integer(const Natural &num)
         : Integer(num, false) {}
 
 Integer::Integer(const std::string &num)
-        : natural(num.substr(1)),
-          sign(num.at(0) == '-') {}
+        : sign(num.at(0) == '-'),
+         natural(num.substr(sign)) {}
 
 Integer::Integer(long int num)
         : sign(num < 0),
