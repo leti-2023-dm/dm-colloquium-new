@@ -131,4 +131,12 @@ Rational::Rational(const double& num) {
     (*this) = Rational(std::to_string(num));
 }
 
+const Integer &Rational::getNumerator() const {
+    return numerator;
+}
+
+const Natural &Rational::getDenominator() const {
+    return denominator;
+}
+
 
