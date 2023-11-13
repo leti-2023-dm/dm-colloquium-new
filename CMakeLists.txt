@@ -11,5 +11,4 @@ add_executable(main.cpp
         Algebras/Integer.h
         Algebras/Integer.cpp
         Algebras/Rational.cpp
-        main.cpp
 )
