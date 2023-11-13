@@ -33,7 +33,7 @@ Natural mod_nn_n(Natural& num1, Natural& num2);
 
 Natural gcf_nn_n(const Natural& num1, const Natural& num2);
 
-Natural lcm_nn_n(Natural& num1, Natural& num2);
+Natural lcm_nn_n(const Natural& num1, const Natural& num2);
 
 Natural fact_n_n(Natural& num);
 

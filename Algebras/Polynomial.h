@@ -1,3 +1,4 @@
+
 #ifndef COLOQ_POLYNOMIAL_H
 #define COLOQ_POLYNOMIAL_H
 #include "Rational.h"
@@ -16,7 +17,8 @@ public:
 
     Polynomial();
 
-    Polynomial(const Rational& num);
+
+    Polynomial(const Rational& num, size_t deg = 0);
 
     Polynomial(const double& num);
 
@@ -38,18 +40,33 @@ public:
 
     size_t size() const;
 
+
+    size_t degre() const;
+
     Rational fac_p() const;
+
+    Polynomial div_pp_qxk(const Polynomial& other) const;
+
 
     Polynomial operator/(const Polynomial& other) const;
 
     Polynomial operator%(const Polynomial& other) const;
 
+
+    bool operator == (const Polynomial& other) const;
+
+    bool operator != (const Polynomial& other) const;
+
+    Polynomial derivative() const;
+
     friend std::ostream &operator<<(std::ostream &stream, const Polynomial &p);
 
-    Polynomial der() const;
+
 
     void delete_leading_zeroes();
 };
 
 
+
 #endif //COLOQ_POLYNIMIAL_H
+

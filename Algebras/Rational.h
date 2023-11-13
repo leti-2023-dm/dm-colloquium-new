@@ -52,9 +52,12 @@ public:
 
     Rational operator/(Rational const &other) const;
 
+    bool isInt() const;
+
     [[nodiscard]] const Integer &getNumerator() const;
 
     [[nodiscard]] const Natural &getDenominator() const;
+
 
     friend std::ostream &operator<<(std::ostream &stream, const Rational &num);
 };

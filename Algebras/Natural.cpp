@@ -276,7 +276,7 @@ Natural Natural::operator/(const Natural &other) const {
     Natural tmp = *this;
     while(tmp >= other){
         Natural div_res = tmp.div_nn_dk(other);
-        res.push_front_digit(div_res[div_res.size() - 1]);
+        res = res + div_res;
         tmp = tmp - (other * div_res);
     }
     return res;
@@ -285,3 +285,4 @@ Natural Natural::operator/(const Natural &other) const {
 Natural Natural::operator%(const Natural &other) const {
     return (*this) - (other * ((*this) / other));
 }
+

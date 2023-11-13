@@ -17,8 +17,11 @@ Polynomial::Polynomial() {
     (*this) = Polynomial(Rational(0));
 }
 
-Polynomial::Polynomial(const Rational& num) {
-    coefficients[0] = num;
+
+Polynomial::Polynomial(const Rational& num, size_t deg) {
+    while (coefficients.size() <= deg)
+        coefficients.insert(coefficients.begin(), 0);
+    coefficients[deg] = num;
 }
 
 Polynomial Polynomial::operator+(const Polynomial &other) const {
@@ -86,19 +89,42 @@ size_t Polynomial::size() const {
 }
 
 Rational Polynomial::fac_p() const {
-    return Rational();
+
+    Natural numerator = coefficients[0].getNumerator().abs();
+    bool numer_sign = !coefficients[0].getNumerator().isPositive();
+    Natural denominator = coefficients[0].getDenominator();
+    for (size_t i = 1; i < this->size(); ++i) {
+        numer_sign = (numer_sign + !coefficients[i].getNumerator().isPositive()) %2;
+        numerator = gcf_nn_n(numerator, coefficients[i].getNumerator().abs());
+        denominator = lcm_nn_n(denominator, coefficients[i].getDenominator());
+    }
+    Integer numer = Integer(numerator, numer_sign);
+    return {numer, denominator};
 }
 
 Polynomial Polynomial::operator/(const Polynomial &other) const {
-    return Polynomial();
+    Polynomial res = 0;
+    Polynomial tmp = *this;
+    while(tmp.degre() >= other.degre()){
+        Polynomial div_res = tmp.div_pp_qxk(other);
+        res = res + div_res;
+        tmp = tmp - (other * div_res);
+    }
+    return res;
 }
 
 Polynomial Polynomial::operator%(const Polynomial &other) const {
-    return Polynomial();
+    return (*this) - (other * ((*this) / other));
 }
 
-Polynomial Polynomial::der() const {
-    return Polynomial();
+Polynomial Polynomial::derivative() const {
+    Polynomial res = *this;
+    for (int i = 2; i < res.size(); ++i) {
+        res[i] = res[i] * i;
+    }
+    res.coefficients.erase(res.coefficients.begin());
+    return res;
+
 }
 
 Polynomial &Polynomial::operator=(const Polynomial &other) {
@@ -122,6 +148,30 @@ void Polynomial::delete_leading_zeroes() {
         this->coefficients.pop_back();
 }
 
+
+Polynomial Polynomial::div_pp_qxk(const Polynomial &other) const {
+    Polynomial res = Polynomial(coefficients[coefficients.size() - 1] / other[other.size() - 1], this->size() - other.size());
+    return res;
+}
+
+size_t Polynomial::degre() const {
+    return this->size() - 1;
+}
+
+bool Polynomial::operator==(const Polynomial &other) const {
+    if (this->degre() != other.degre())
+        return false;
+    for (int i = 0; i < this->size(); ++i) {
+        if (coefficients[i] != other[i])
+            return false;
+    }
+    return true;
+}
+
+bool Polynomial::operator!=(const Polynomial &other) const {
+    return !((*this) == other);
+}
+
 std::ostream &operator<<(std::ostream &stream, const Polynomial &p) {
     auto deg = p.coefficients.size() - 1;
     for (size_t ind = 0; ind <= deg; ind++) {
@@ -142,5 +192,6 @@ std::ostream &operator<<(std::ostream &stream, const Polynomial &p) {
 
     return stream;
 }
+
 
 
