@@ -21,8 +21,8 @@ Rational::Rational(const Rational &num) = default;
 
 Rational::Rational(Rational &&num) noexcept = default;
 
+// Parse simple and decimal fraction
 Rational::Rational(const std::string &num) {
-    // number 1242.222
     size_t i = num.find('/');
     if (i != std::string::npos){
         numerator = Integer(num.substr(0, i));
