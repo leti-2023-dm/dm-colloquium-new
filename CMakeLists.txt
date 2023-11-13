@@ -21,6 +21,5 @@ add_executable(
         Modules/modrat.h
         Modules/modpoly.cpp
         Modules/modpoly.h
-        #[["parsing/parser.cpp"
         "parsing/parser.h"]]
 )
