@@ -41,5 +41,6 @@ add_executable(
         Tests/test_modnat.cpp
         Tests/test_modint.cpp
         Tests/test_modrat.cpp
-        ${SOURCES})
+        ${SOURCES}
+        Tests/test_modpoly.cpp)
 target_link_libraries(test_program PRIVATE gtest gtest_main pthread)
