@@ -32,7 +32,7 @@ Rational mul_qq_q(Rational& num1, Rational& num2){
 }
 
 Rational div_qq_q(Rational& num1, Rational& num2){
-    return num1 * num2;
+    return num1 / num2;
 }
 
 Rational pow_qn_q(Rational base, Natural exp){
