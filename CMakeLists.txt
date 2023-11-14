@@ -36,5 +36,9 @@ target_include_directories(program PRIVATE ${OPENSSL_INCLUDE_DIR})
 target_link_libraries(program PRIVATE ${OPENSSL_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto)
 
 # test part
-add_executable(test_program Tests/test_modnat.cpp ${SOURCES})
+add_executable(
+        test_program
+        Tests/test_modnat.cpp
+        Tests/test_modint.cpp 
+        ${SOURCES})
 target_link_libraries(test_program PRIVATE gtest gtest_main pthread)
