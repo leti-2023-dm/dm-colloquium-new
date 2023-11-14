@@ -39,6 +39,7 @@ target_link_libraries(program PRIVATE ${OPENSSL_LIBRARIES} OpenSSL::SSL OpenSSL:
 add_executable(
         test_program
         Tests/test_modnat.cpp
-        Tests/test_modint.cpp 
+        Tests/test_modint.cpp
+        Tests/test_modrat.cpp
         ${SOURCES})
 target_link_libraries(test_program PRIVATE gtest gtest_main pthread)
