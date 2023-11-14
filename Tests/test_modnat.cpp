@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "../Modules/modint.h"
+#include "../Modules/modnat.h"
 
 // Tests for the com_nn_d function
 TEST(ComparisonTest, CompareNaturalNumbers) {
@@ -94,11 +94,14 @@ TEST(DivideByNaturalWithRemainderTest, DivideNaturalByNaturalWithRemainder) {
 
 // Tests for the div_nn_n function
 TEST(DivideNumbersTest, DivideTwoNaturalNumbers) {
-    Natural num1(98765);
-    Natural num2(123);
-    Natural result = div_nn_n(num1, num2);
+    Natural num(98765);
+    Natural div1(123);
+    Natural div2(123000);
+    Natural result1 = div_nn_n(num, div1);
+    Natural result2 = div_nn_n(num, div2);
 
-    EXPECT_EQ(result, 802);
+    EXPECT_EQ(result1, 802);
+    EXPECT_EQ(result2, 0);
 }
 
 // Tests for the mod_nn_n function
@@ -153,15 +156,6 @@ TEST(PowerTest, CalculatePowerOfNaturalNumber) {
     EXPECT_EQ(result, 1024);
 }
 
-/*
-// Tests for the sqrt_n_q function
-TEST(SquareRootTest, CalculateSquareRootOfNaturalNumber) {
-    Natural num(25);
-    Natural result = sqrt_n_q(num);
-
-    EXPECT_EQ(result, 5);
-}
-*/
 
 int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);
