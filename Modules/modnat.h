@@ -41,6 +41,4 @@ Natural sqr_n_n(Natural& num);
 
 Natural pow_nn_n(Natural base, Natural exp);
 
-Natural sqrt_n_q(Natural& num);
-
 #endif //COLOQ_MY_TRY_MODNAT_H

@@ -1,5 +1,6 @@
 #ifndef COLOQ_MY_TRY_MODINT_H
 #define COLOQ_MY_TRY_MODINT_H
+#include "modnat.h"
 #include "../Algebras/Integer.h"
 
 Natural abs_z_n(Integer& num);
