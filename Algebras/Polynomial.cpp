@@ -5,10 +5,11 @@
 #include <cstring>
 
 
-Polynomial::Polynomial(std::vector<Rational> coefs): coefficients(std::move(coefs)) {
+Polynomial::Polynomial(std::vector<Rational> coefs) : coefficients(std::move(coefs)) {
     std::reverse(this->coefficients.begin(), this->coefficients.end());
     delete_leading_zeroes();
 }
+
 
 Polynomial::Polynomial(const std::string& poly) {
     Polynomial res;
@@ -38,7 +39,7 @@ Polynomial::Polynomial(): Polynomial(Rational(0)) {
 }
 
 
-Polynomial::Polynomial(const Rational& num, size_t deg) {
+Polynomial::Polynomial(const Rational &num, size_t deg) {
     while (coefficients.size() <= deg)
         coefficients.insert(coefficients.begin(), 0);
     coefficients[deg] = num;
@@ -47,10 +48,11 @@ Polynomial::Polynomial(const Rational& num, size_t deg) {
 Polynomial Polynomial::operator+(const Polynomial &other) const {
     size_t i = 0;
     Polynomial res = (*this);
-    while (i < this->size() ){
-        Rational other_num = i < other.size()? other[i] : 0;
+
+    while (i < this->size()) {
+        Rational other_num = i < other.size() ? other[i] : 0;
         res.coefficients[i] = res[i] + other_num;
-        ++i;
+        i++;
     }
     while (i < other.size()) {
         Rational new_coef = other[i];
@@ -64,10 +66,11 @@ Polynomial Polynomial::operator+(const Polynomial &other) const {
 Polynomial Polynomial::operator-(const Polynomial &other) const {
     size_t i = 0;
     Polynomial res = (*this);
-    while (i < this->size() ){
-        Rational other_num = i < other.size()? -other[i] : 0;
+
+    while (i < this->size()) {
+        Rational other_num = i < other.size() ? -other[i] : 0;
         res.coefficients[i] = res[i] + other_num;
-        ++i;
+        i++;
     }
     while (i < other.size()) {
         Rational new_coef = -other[i];
@@ -80,7 +83,7 @@ Polynomial Polynomial::operator-(const Polynomial &other) const {
 
 Polynomial Polynomial::operator*(const Rational &coef) const {
     auto res = *this;
-    for (auto& pol: res.coefficients) {
+    for (auto &pol: res.coefficients) {
         pol = pol * coef;
     }
     return res;
@@ -116,7 +119,7 @@ Rational Polynomial::fac_p() const {
     bool numer_sign = !coefficients[0].getNumerator().isPositive();
     Natural denominator = coefficients[0].getDenominator();
     for (size_t i = 1; i < this->size(); ++i) {
-        numer_sign = (numer_sign + !coefficients[i].getNumerator().isPositive()) %2;
+        numer_sign = (numer_sign + !coefficients[i].getNumerator().isPositive()) % 2;
         numerator = gcf_nn_n(numerator, coefficients[i].getNumerator().abs());
         denominator = lcm_nn_n(denominator, coefficients[i].getDenominator());
     }
@@ -127,16 +130,19 @@ Rational Polynomial::fac_p() const {
 Polynomial Polynomial::operator/(const Polynomial &other) const {
     Polynomial res = 0;
     Polynomial tmp = *this;
-    while(tmp.degre() >= other.degre() && tmp.degre() > 0){
+
+    while (tmp.degre() >= other.degre() && tmp.degre() > 0) {
         Polynomial div_res = tmp.div_pp_qxk(other);
         res = res + div_res;
         tmp = tmp - (other * div_res);
     }
-    if (other.degre() == 0){
+
+    if (other.degre() == 0) {
         res = res + tmp[0] / other[0];
     }
     return res;
 }
+
 
 Polynomial Polynomial::operator%(const Polynomial &other) const {
     return (*this) - (other * ((*this) / other));
@@ -149,7 +155,6 @@ Polynomial Polynomial::derivative() const {
     }
     res.coefficients.erase(res.coefficients.begin());
     return res;
-
 }
 
 
@@ -164,7 +169,8 @@ void Polynomial::delete_leading_zeroes() {
 
 
 Polynomial Polynomial::div_pp_qxk(const Polynomial &other) const {
-    Polynomial res = Polynomial(coefficients[coefficients.size() - 1] / other[other.size() - 1], this->size() - other.size());
+    Polynomial res = Polynomial(coefficients[coefficients.size() - 1] / other[other.size() - 1],
+                                this->size() - other.size());
     return res;
 }
 
@@ -189,12 +195,12 @@ bool Polynomial::operator!=(const Polynomial &other) const {
 std::ostream &operator<<(std::ostream &stream, const Polynomial &p) {
     auto deg = p.coefficients.size() - 1;
     for (size_t ind = 0; ind <= deg; ind++) {
-        const Rational& coefficient = p.coefficients[deg - ind];
-        const Integer& numerator = coefficient.getNumerator();
+        const Rational &coefficient = p.coefficients[deg - ind];
+        const Integer &numerator = coefficient.getNumerator();
         auto isNegative = !numerator.isPositive();
 
         // we don't output monomials with zero coefficients
-        if(numerator.abs().size() == 1 && numerator[0] == 0) continue;
+        if (numerator.abs().size() == 1 && numerator[0] == 0) continue;
 
         if (isNegative) stream << '(';
         stream << coefficient;
