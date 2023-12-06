@@ -35,7 +35,7 @@ Integer mul_zz_z(Integer& num1, Integer& num2){
 }
 
 Integer div_zz_z(Integer& num1, Integer& num2){
-    return num1 * num2;
+    return num1 / num2;
 }
 
 Integer mod_zz_z(Integer& num1, Integer& num2){

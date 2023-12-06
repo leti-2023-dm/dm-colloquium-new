@@ -22,9 +22,9 @@ public:
 
     Polynomial(const double& num);
 
-    Polynomial& operator=(const Polynomial& other);
+    Polynomial& operator=(const Polynomial& other) = default;
 
-    Polynomial& operator=(Polynomial&& other) noexcept ;
+    Polynomial& operator=(Polynomial&& other) = default;
 
     Polynomial operator+(const Polynomial& other) const;
 

@@ -106,7 +106,3 @@ Natural pow_nn_n(Natural base, Natural exp){
     }
     return res;
 }
-
-Natural sqrt_n_q(Natural& num){
-
-}

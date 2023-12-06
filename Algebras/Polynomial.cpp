@@ -2,6 +2,7 @@
 #include <utility>
 #include <sstream>
 #include <algorithm>
+#include <cstring>
 
 
 Polynomial::Polynomial(std::vector<Rational> coefs): coefficients(std::move(coefs)) {
@@ -10,11 +11,30 @@ Polynomial::Polynomial(std::vector<Rational> coefs): coefficients(std::move(coef
 }
 
 Polynomial::Polynomial(const std::string& poly) {
-
+    Polynomial res;
+    std::stringstream stream(poly);
+    std::string tmp;
+    while (getline(stream, tmp, '+')){
+        size_t xid = tmp.find('x');
+        if (xid == std::string::npos){
+            res = res + Rational(tmp);
+            continue;
+        }
+        std::string left = tmp.substr(0, xid != 0 && tmp[xid] == '*'? xid : xid - 1);
+        Rational coef = Rational(left != "x" ? left: "1");
+        if (xid + 2 >= tmp.size())
+            continue;
+        std::string right = tmp.substr(xid + 2, tmp.size() - xid - 2);
+        std::stringstream sstream(right);
+        size_t degre;
+        sstream >> degre;
+        res = res + Polynomial(coef, degre);
+    }
+    *this = res;
 }
 
-Polynomial::Polynomial() {
-    (*this) = Polynomial(Rational(0));
+Polynomial::Polynomial(): Polynomial(Rational(0)) {
+
 }
 
 
@@ -29,7 +49,7 @@ Polynomial Polynomial::operator+(const Polynomial &other) const {
     Polynomial res = (*this);
     while (i < this->size() ){
         Rational other_num = i < other.size()? other[i] : 0;
-        res[i] = res[i] + other_num;
+        res.coefficients[i] = res[i] + other_num;
         ++i;
     }
     while (i < other.size()) {
@@ -37,6 +57,7 @@ Polynomial Polynomial::operator+(const Polynomial &other) const {
         res.coefficients.push_back(new_coef);
         i++;
     }
+    res.delete_leading_zeroes();
     return res;
 }
 
@@ -45,7 +66,7 @@ Polynomial Polynomial::operator-(const Polynomial &other) const {
     Polynomial res = (*this);
     while (i < this->size() ){
         Rational other_num = i < other.size()? -other[i] : 0;
-        res[i] = res[i] + other_num;
+        res.coefficients[i] = res[i] + other_num;
         ++i;
     }
     while (i < other.size()) {
@@ -53,6 +74,7 @@ Polynomial Polynomial::operator-(const Polynomial &other) const {
         res.coefficients.push_back(new_coef);
         i++;
     }
+    res.delete_leading_zeroes();
     return res;
 }
 
@@ -105,10 +127,13 @@ Rational Polynomial::fac_p() const {
 Polynomial Polynomial::operator/(const Polynomial &other) const {
     Polynomial res = 0;
     Polynomial tmp = *this;
-    while(tmp.degre() >= other.degre()){
+    while(tmp.degre() >= other.degre() && tmp.degre() > 0){
         Polynomial div_res = tmp.div_pp_qxk(other);
         res = res + div_res;
         tmp = tmp - (other * div_res);
+    }
+    if (other.degre() == 0){
+        res = res + tmp[0] / other[0];
     }
     return res;
 }
@@ -120,24 +145,13 @@ Polynomial Polynomial::operator%(const Polynomial &other) const {
 Polynomial Polynomial::derivative() const {
     Polynomial res = *this;
     for (int i = 2; i < res.size(); ++i) {
-        res[i] = res[i] * i;
+        res.coefficients[i] = res[i] * i;
     }
     res.coefficients.erase(res.coefficients.begin());
     return res;
 
 }
 
-Polynomial &Polynomial::operator=(const Polynomial &other) {
-    Polynomial tmp(other);
-    std::swap(tmp.coefficients, this->coefficients);
-    return *this;
-}
-
-Polynomial &Polynomial::operator=(Polynomial &&other) noexcept {
-    if (this != &other)
-        std::swap(other.coefficients, this->coefficients);
-    return *this;
-}
 
 Polynomial::Polynomial(const double &num) {
     (*this) = Polynomial(Rational(num));

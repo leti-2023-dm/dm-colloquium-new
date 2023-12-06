@@ -1,5 +1,6 @@
 #ifndef COLOQ_MY_TRY_MODPOLY_H
 #define COLOQ_MY_TRY_MODPOLY_H
+#include "modrat.h"
 #include "../Algebras/Polynomial.h"
 
 Polynomial add_pp_p(Polynomial& pol1, Polynomial& pol2);

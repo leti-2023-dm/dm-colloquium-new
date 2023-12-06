@@ -1,5 +1,6 @@
 #ifndef COLOQ_MY_TRY_MODRAT_H
 #define COLOQ_MY_TRY_MODRAT_H
+#include "modint.h"
 #include "../Algebras/Rational.h"
 
 Rational red_q_q(Rational num);
