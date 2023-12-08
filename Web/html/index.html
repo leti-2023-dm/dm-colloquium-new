@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <title>Calculator</title>
+</head>
+<body>
+<div class="container">
+    <div class="title">
+        Калькулятор
+    </div>
+
+    <div class="columns">
+        <div class="column">
+            <input class="input" type="text" id="expression"
+                   placeholder="Введите выражение">
+        </div>
+
+        <div class="column">
+            <input class="input" type="text" id="argument"
+                   placeholder="Введите аргумент" disabled>
+        </div>
+
+        <div class="column">
+            <button id="factorize" class="button is-fullwidth is-light is-warning">
+                Факторизация
+            </button>
+        </div>
+
+        <div class="column">
+            <button id="reduceRoots" class="button is-fullwidth is-light is-warning">
+                Сокращение корней
+            </button>
+        </div>
+    </div>
+
+    <div class="container m-3">
+        <label class="label" for="result">Результат:</label>
+        <input class="input" type="text" id="result" readonly>
+    </div>
+
+    <div class="container  m-3">
+        <button class="button" onclick="calculate()">
+            Вычислить
+        </button>
+    </div>
+</div>
+
+
+<script>
+    let isActive = (element) => element.classList.contains("is-success");
+    let changeState = (element) => setState(element, element.classList.contains("is-success"));
+
+    let setState = (element, state) => {
+        let oldValue = "is-warning";
+        let newValue = "is-success"
+        if (state) [oldValue, newValue] = [newValue, oldValue];
+        element.classList.remove(oldValue);
+        element.classList.add(newValue);
+    }
+
+    document.getElementById("factorize").addEventListener("click", () => changeState(document.getElementById('factorize')));
+    document.getElementById("reduceRoots").addEventListener("click", () => changeState(document.getElementById('reduceRoots')));
+
+    function calculate() {
+        const expression = document.getElementById('expression').value;
+        const argument = document.getElementById('argument').value;
+        const factorize = isActive(document.getElementById('factorize'));
+        const reduceRoots = isActive(document.getElementById('reduceRoots'));
+
+        const data = {
+            expression: expression,
+            argument: argument,
+            factorize: factorize,
+            reduceRoots: reduceRoots
+        };
+
+        fetch('http://localhost:13931/calculate', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then(data => document.getElementById('result').value = data.result)
+            .catch(error => alert('Error: ' + error.message));
+    }
+
+    document.getElementById('expression').addEventListener('input', function () {
+        const argumentField = document.getElementById('argument');
+        const factorizeCheckbox = isActive(document.getElementById('factorize'));
+
+        argumentField.disabled = !this.value.includes('x');
+        factorizeCheckbox.disabled = !this.value.includes('x') || !argumentField.value.trim();
+    });
+
+    document.getElementById('argument').addEventListener('input', () => {
+        setState(document.getElementById('factorize'), !this.value.trim());
+
+        // Input validation
+        const value = this.value.trim();
+        if (value && !isNumeric(value)) {
+            alert('Аргумент должен быть числом');
+            this.value = '';
+        }
+    });
+
+    function isNumeric(str) {
+        if (typeof str != "string") return false
+        return !isNaN(str) && !isNaN(parseFloat(str))
+    }
+</script>
+</body>
+</html>
