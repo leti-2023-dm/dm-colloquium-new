@@ -19,6 +19,6 @@ Rational mul_qq_q(Rational& num1, Rational& num2);
 
 Rational div_qq_q(Rational& num1, Rational& num2);
 
-Rational pow_qn_q(Rational base, Natural exp);
+Rational pow_qn_q(const Rational& base, Natural exp);
 
 #endif //COLOQ_MY_TRY_MODRAT_H

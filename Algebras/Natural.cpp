@@ -259,7 +259,7 @@ Natural Natural::div_nn_dk(Natural const &other) {
     Natural tmp = other;
     while (tmp <= divisible){
         tmp = tmp + other;
-        ++res;
+        res = res + 1;
     }
     res = res - 1;
     size_t power = k - this->number.begin() + 1;

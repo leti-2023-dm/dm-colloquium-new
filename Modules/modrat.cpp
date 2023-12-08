@@ -35,14 +35,8 @@ Rational div_qq_q(Rational& num1, Rational& num2){ //'/'
     return num1 / num2;
 }
 
-Rational pow_qn_q(Rational base, Natural exp){ //'^'
-    Rational res = 1;
-    while (exp > 0){
-        if (exp[0] % 2 == 1){
-            res = res * base;
-        }
-        base = base * base;
-        exp = exp / 2;
-    }
-    return res;
+Rational pow_qn_q(const Rational& base, Natural exp){ //'^'
+    Integer numerator = base.getNumerator();
+    Natural denumerator = base.getDenominator();
+    return Rational(pow_zn_z(numerator, exp), pow_nn_n(denumerator, exp));
 }
