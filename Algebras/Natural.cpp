@@ -255,13 +255,16 @@ Natural Natural::div_nn_dk(Natural const &other) {
     Natural divisible = 0;
     while (divisible < other)
         divisible.push_front_digit(*(k--));
-    size_t res = 1;
+    Natural res = 1;
     Natural tmp = other;
     while (tmp <= divisible){
         tmp = tmp + other;
         ++res;
     }
-    return (res - 1) * ((size_t)std::pow(10, k - this->number.begin() + 1));
+    res = res - 1;
+    size_t power = k - this->number.begin() + 1;
+    res = res.mul_nk(power);
+    return res;
 }
 
 void Natural::push_front_digit(int digit) {

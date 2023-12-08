@@ -20,10 +20,12 @@ Polynomial::Polynomial(const std::string& poly) {
             res = res + Rational(tmp);
             continue;
         }
-        std::string left = tmp.substr(0, xid != 0 && tmp[xid] == '*'? xid : xid - 1);
-        Rational coef = Rational(left != "x" ? left: "1");
-        if (xid + 2 >= tmp.size())
+        std::string left = tmp.substr(0, xid != 0 && tmp[xid - 1] == '*'? xid - 1 : xid);
+        Rational coef = Rational(!left.empty() ? left: "1");
+        if (xid + 2 >= tmp.size()) {
+            res = res + Polynomial(coef, 1);
             continue;
+        }
         std::string right = tmp.substr(xid + 2, tmp.size() - xid - 2);
         std::stringstream sstream(right);
         size_t degre;

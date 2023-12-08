@@ -90,7 +90,7 @@ Integer Integer::operator*(const Natural &other) const {
 Integer Integer::operator/(const Integer &other) {
     if (other == 0)
         throw std::invalid_argument("Divide by zero");
-    return Integer(natural / other.natural, sign != other.sign);
+    return Integer(natural / other.natural + (sign? 1: 0), sign != other.sign);
 }
 
 Integer Integer::operator%(const Integer &other) {
