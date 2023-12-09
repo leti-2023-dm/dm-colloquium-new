@@ -8,6 +8,11 @@ find_package(OpenSSL 3.0.0 REQUIRED)
 
 find_package(GTest REQUIRED)
 
+
+set(RESOURCE_DIR "${CMAKE_SOURCE_DIR}/Web/html")
+file(COPY ${RESOURCE_DIR} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+
+
 # Список исходных файлов
 set(SOURCES
         Algebras/Natural.h
