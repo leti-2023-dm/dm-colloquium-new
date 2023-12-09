@@ -80,14 +80,9 @@ std::vector<std::string> Parser::parseExpression(std::string str) {
     // Fold expression
     for (int i = 0; i < result.size(); i++) {
         // Move negative to number
-        if (result[i] == "-" && digits.find(result[i + 1][0]) == digits.end()) {
-            continue;
-        } else if (result[i] == "-" && digits.find(result[i - 1][0]) != digits.end()) {
-            result[i] = "+";
-            result[i + 1] = "-" + result[i + 1];
-        } else if (result[i] == "-") {
-            result.erase(result.begin() + i);
-            result[i] = "-" + result[i];
+        if (result[i] == "-" && (i == 0 || isBracket(result[i - 1][0]))) {
+            result[i] = "-" + result[i + 1];
+            result.erase(result.begin() + i + 1, result.begin() + i + 2);
         }
     }
 
@@ -205,7 +200,9 @@ std::string Parser::executeRPN(std::vector<std::string> rpnExpression) {
             catch (std::exception &e) { throw std::invalid_argument("Factorial number should be natural"); }
         } else {
             try { res << executeBiOp(operands[0], operands[1], symbol); }
-            catch (std::exception &e) { throw std::invalid_argument("Invalid operands for " + std::string{symbol}); }
+            catch (std::exception &e) {
+                throw std::invalid_argument("Invalid operands for \'" + std::string{symbol, '\''});
+            }
         }
         cursor -= ARNY;
         rpnExpression[cursor] = res.str();
@@ -220,14 +217,13 @@ bool Parser::isBracket(char symbol) {
     return symbol == '(' || symbol == ')';
 }
 
+
 std::string Parser::executeBiOp(std::string first, std::string second, char op) {
     std::set<char> baseOperations = {'*', '+', '-', '/'};
     std::stringstream result;
     if (baseOperations.find(op) != baseOperations.end()) {
         switch (std::max(getAlgebraType(first), getAlgebraType(second))) {
             case NATURAL:
-                result << executeBinary(Natural(first), Natural(second), op);
-                break;
             case INTEGER:
                 result << executeBinary(Integer(first), Integer(second), op);
                 break;

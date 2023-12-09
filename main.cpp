@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include "Algebras/Polynomial.h"
 #include "Algebras/Rational.h"
@@ -15,6 +16,7 @@ int main() {
     std::cout << p.parse("1 + (42 - 41) * 1 ") << std::endl;
     std::cout << p.parse("3.0 + 4! * 2 / (1 - 5)^2") << std::endl;
     std::cout << p.parse("40 - (100 - 99) * 1 ") << std::endl;
+    std::cout << p.parse("-1") << std::endl;
     std::cout << p.parse("(-1)") << std::endl;
     std::cout << p.parse("34^2*14/(7+7!)") << std::endl;
     std::cout << p.parse("2^5") << std::endl;
@@ -23,10 +25,13 @@ int main() {
     std::cout << p.parse("38.5^2*14/(7+7!)") << std::endl;
     std::cout << p.parse("31*28^2-112") << std::endl;
     std::cout << p.parse("12.5^2") << std::endl;
+    std::cout << p.parse("5!+2") << std::endl;
+    std::cout << p.parse("5!-2") << std::endl;
     try { p.parse("(-2)!"); }
     catch (std::exception &e) { std::cerr << e.what() << std::endl; }
     try { p.parse("12.5^(-2)"); }
     catch (std::exception &e) { std::cerr << e.what() << std::endl; }
+
 
     return 0;
 }
@@ -46,7 +51,7 @@ int main1() {
 }
 
 
-int main0() {
+int main2() {
     http_server server;
     server.start();
 
@@ -54,4 +59,3 @@ int main0() {
     std::getline(std::cin, line);
     return 0;
 }
-
