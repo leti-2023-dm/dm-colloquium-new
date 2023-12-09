@@ -200,8 +200,13 @@ std::string Parser::executeRPN(std::vector<std::string> rpnExpression) {
         for (int i = 0; i < ARNY; ++i) operands.push_back(rpnExpression[cursor - ARNY + i]);
         rpnExpression.erase(rpnExpression.begin() + cursor - ARNY, rpnExpression.begin() + cursor);
 
-        if (ARNY == 1) res << fact_n_n(*(new Natural(operands[0])));
-        else res << executeBiOp(operands[0], operands[1], symbol);
+        if (ARNY == 1) {
+            try { res << fact_n_n(*(new Natural(operands[0]))); }
+            catch (std::exception &e) { throw std::invalid_argument("Factorial number should be natural"); }
+        } else {
+            try { res << executeBiOp(operands[0], operands[1], symbol); }
+            catch (std::exception &e) { throw std::invalid_argument("Invalid operands for " + std::string{symbol}); }
+        }
         cursor -= ARNY;
         rpnExpression[cursor] = res.str();
     }
@@ -230,17 +235,19 @@ std::string Parser::executeBiOp(std::string first, std::string second, char op) 
                 result << executeBinary(Rational(first), Rational(second), op);
                 break;
             default:
-                throw std::invalid_argument("Argument should be a number");
+                throw std::invalid_argument("Argument should be a suitable number");
         }
         return result.str();
     }
 
     switch (op) {
         case '%':
-            result << Integer(first) % Integer(second);
+            try { result << Integer(first) % Integer(second); }
+            catch (std::exception &e) { throw std::invalid_argument("Operands aren't proper integers"); }
             break;
         case '^':
-            result << pow_qn_q(Rational(first), Natural(second));
+            try { result << pow_qn_q(Rational(first), Natural(second)); }
+            catch (std::exception &e) { throw std::invalid_argument("Base isn't Rational or exponent isn't Natural"); }
             break;
         default:
             throw std::invalid_argument("Undefined operand");

@@ -9,7 +9,6 @@
 #include "Web/backend.cpp"
 
 
-
 int main() {
     Parser p;
     std::cout << p.parse("()") << std::endl;
@@ -24,6 +23,10 @@ int main() {
     std::cout << p.parse("38.5^2*14/(7+7!)") << std::endl;
     std::cout << p.parse("31*28^2-112") << std::endl;
     std::cout << p.parse("12.5^2") << std::endl;
+    try { p.parse("(-2)!"); }
+    catch (std::exception &e) { std::cerr << e.what() << std::endl; }
+    try { p.parse("12.5^(-2)"); }
+    catch (std::exception &e) { std::cerr << e.what() << std::endl; }
 
     return 0;
 }
@@ -43,7 +46,7 @@ int main1() {
 }
 
 
-int main4() {
+int main0() {
     http_server server;
     server.start();
 
