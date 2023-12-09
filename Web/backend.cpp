@@ -3,6 +3,7 @@
 
 #include <fstream>
 #include <sstream>
+#include "../Modules/parser.h"
 
 using namespace web;
 using namespace http;
@@ -53,7 +54,14 @@ public:
             auto reduceRoots = requestBody[U("reduceRoots")].as_bool();
 
             json::value responseBody;
-            responseBody[U("result")] = json::value::string(expression);
+            try {
+                Parser p;
+                auto resp = p.parse(expression);
+                responseBody[U("result")] = json::value::string(resp);
+            } catch (std::exception &e) {
+                responseBody[U("result")] = json::value::string(e.what());
+            }
+
             http_response response(status_codes::OK);
             response.set_body(responseBody);
 
@@ -68,12 +76,3 @@ public:
 private:
     http_listener m_listener;
 };
-
-int startBackend() {
-    http_server server;
-    server.start();
-
-    std::string line;
-    std::getline(std::cin, line);
-    return 0;
-}
