@@ -4,6 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include "../Modules/parser.h"
+#include "../Modules/modpoly.h"
 
 using namespace web;
 using namespace http;
@@ -56,8 +57,17 @@ public:
             json::value responseBody;
             try {
                 Parser p;
-                auto resp = p.parse(expression);
-                responseBody[U("result")] = json::value::string(resp);
+                auto parsed = p.parse(expression);
+
+                if (argument.empty())
+                    responseBody[U("result")] = json::value::string(parsed);
+                else {
+                    Polynomial p(parsed);
+                    Rational r(argument);
+                    std::stringstream res;
+                    res << solve_pq_q(p, r);
+                    responseBody[U("result")] = json::value::string(res.str());
+                }
             } catch (std::exception &e) {
                 responseBody[U("result")] = json::value::string(e.what());
             }

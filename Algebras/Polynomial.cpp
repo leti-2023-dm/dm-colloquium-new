@@ -13,7 +13,9 @@ Polynomial::Polynomial(std::vector<Rational> coefs) : coefficients(std::move(coe
 
 Polynomial::Polynomial(const std::string &poly) {
     Polynomial res;
-    std::stringstream stream(poly);
+    std::string temp = poly;
+    temp.erase(std::remove_if(temp.begin(), temp.end(), ::isspace), temp.end());
+    std::stringstream stream(temp);
     std::string tmp;
     while (getline(stream, tmp, '+')) {
         size_t xid = tmp.find('x');
