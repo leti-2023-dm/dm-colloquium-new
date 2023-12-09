@@ -79,18 +79,6 @@ std::vector<std::string> Parser::parseExpression(std::string str) {
 
     // Fold expression
     for (int i = 0; i < result.size(); i++) {
-        // Collapse fractions
-        if (result[i].find('/') != std::string::npos &&
-            isdigit(result[i + 1][0]) &&
-            result[i - 1].find('!') == std::string::npos &&
-            result[i - 1].find('.') == std::string::npos &&
-            result[i + 1].find('!') == std::string::npos &&
-            result[i + 1].find('.') == std::string::npos) {
-
-            result[i - 1] = result[i - 1] + "/" + result[i + 1];
-            result.erase(result.begin() + i, result.begin() + i + 2);
-        }
-
         // Move negative to number
         if (result[i] == "-" && digits.find(result[i + 1][0]) == digits.end()) {
             continue;
@@ -100,15 +88,6 @@ std::vector<std::string> Parser::parseExpression(std::string str) {
         } else if (result[i] == "-") {
             result.erase(result.begin() + i);
             result[i] = "-" + result[i];
-        }
-
-        // Create decimal fraction
-        if (int c = result[i].find('.') != std::string::npos) {
-            std::string znam = "1";
-            unsigned long d = result[i].size() - c - 1;
-            for (int y = 0; y < d; y++) znam += "0";
-            result[i].erase(c, 1);
-            result[i] += "/" + znam;
         }
     }
 
@@ -196,6 +175,8 @@ std::string Parser::parse(const std::string &str) {
 }
 
 std::string Parser::executeRPN(std::vector<std::string> rpnExpression) {
+    if (rpnExpression.empty()) return "0";
+
     long int cursor = 0;
     while (rpnExpression.size() != 1) {
         auto value = rpnExpression[cursor];

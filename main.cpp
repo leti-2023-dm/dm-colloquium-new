@@ -4,32 +4,36 @@
 #include "Modules/modint.h"
 #include "Modules/modpoly.h"
 #include "Modules/parser.h"
+#include <iostream>
+#include <string>
+#include "Web/backend.cpp"
 
 
-int mainExmpl() {
+
+int main() {
     Parser p;
-    //Tests rpn
-    p.parse("()");
-    p.parse("1 + (42 - 41) * 1 ");
-    p.parse("3.0 + 4! * 2 / (1 - 5)^2");
-    p.parse("40 - (100 - 99) * 1 ");
-    p.parse("(-1)");
-    p.parse("34^2*14/(7+7!)");
-    p.parse("34.0^2*14/(7+7!)"); //WTF
-    p.parse("2^5");
-    p.parse("2^50");
-    p.parse("2^500");
-    p.parse("31*28^22-112"); // WTF
-    p.parse("12.5^2"); // WTF
+    std::cout << p.parse("()") << std::endl;
+    std::cout << p.parse("1 + (42 - 41) * 1 ") << std::endl;
+    std::cout << p.parse("3.0 + 4! * 2 / (1 - 5)^2") << std::endl;
+    std::cout << p.parse("40 - (100 - 99) * 1 ") << std::endl;
+    std::cout << p.parse("(-1)") << std::endl;
+    std::cout << p.parse("34^2*14/(7+7!)") << std::endl;
+    std::cout << p.parse("2^5") << std::endl;
+    std::cout << p.parse("2^50") << std::endl;
+    std::cout << p.parse("2^500") << std::endl;
+    std::cout << p.parse("38.5^2*14/(7+7!)") << std::endl;
+    std::cout << p.parse("31*28^2-112") << std::endl;
+    std::cout << p.parse("12.5^2") << std::endl;
 
     return 0;
 }
 
-#include <iostream>
-#include <string>
-
 // Polynomial input
 int main1() {
+
+    std::cout << Polynomial("x^2+2") << std::endl;
+    std::cout << Polynomial("x^2+x+2") << std::endl;
+    std::cout << Polynomial("x^2") << std::endl;
     Parser p;
     std::cout << p.parse("(x^2+2)*(24)") << std::endl;
     std::cout << p.parse("(x^2+2)*(24x)") << std::endl;
@@ -38,9 +42,8 @@ int main1() {
     return 0;
 }
 
-#include "Web/backend.cpp"
 
-int main() {
+int main4() {
     http_server server;
     server.start();
 
@@ -49,8 +52,3 @@ int main() {
     return 0;
 }
 
-int main4() {
-    std::cout << Polynomial("x^2+2") << std::endl;
-    std::cout << Polynomial("x^2+x+2") << std::endl;
-    std::cout << Polynomial("x^2") << std::endl;
-}
