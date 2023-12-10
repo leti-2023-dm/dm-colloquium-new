@@ -8,6 +8,11 @@ find_package(OpenSSL 3.0.0 REQUIRED)
 
 find_package(GTest REQUIRED)
 
+
+set(RESOURCE_DIR "${CMAKE_SOURCE_DIR}/Web/html")
+file(COPY ${RESOURCE_DIR} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+
+
 # Список исходных файлов
 set(SOURCES
         Algebras/Natural.h
@@ -26,6 +31,9 @@ set(SOURCES
         Modules/modint.cpp
         Modules/modrat.cpp
         Modules/modpoly.cpp
+        Modules/parser.h
+        Modules/parser.cpp
+        Web/backend.cpp
 )
 
 # main program
@@ -41,6 +49,7 @@ add_executable(
         Tests/test_modnat.cpp
         Tests/test_modint.cpp
         Tests/test_modrat.cpp
-        ${SOURCES}
-        Tests/test_modpoly.cpp)
+        Tests/test_modpoly.cpp
+        ${SOURCES})
+
 target_link_libraries(test_program PRIVATE gtest gtest_main pthread)

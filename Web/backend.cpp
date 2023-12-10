@@ -3,6 +3,8 @@
 
 #include <fstream>
 #include <sstream>
+#include "../Modules/parser.h"
+#include "../Modules/modpoly.h"
 
 using namespace web;
 using namespace http;
@@ -53,7 +55,23 @@ public:
             auto reduceRoots = requestBody[U("reduceRoots")].as_bool();
 
             json::value responseBody;
-            responseBody[U("result")] = json::value::string(expression);
+            try {
+                Parser p;
+                auto parsed = p.parse(expression);
+
+                if (argument.empty())
+                    responseBody[U("result")] = json::value::string(parsed);
+                else {
+                    Polynomial p(parsed);
+                    Rational r(argument);
+                    std::stringstream res;
+                    res << solve_pq_q(p, r);
+                    responseBody[U("result")] = json::value::string(res.str());
+                }
+            } catch (std::exception &e) {
+                responseBody[U("result")] = json::value::string(e.what());
+            }
+
             http_response response(status_codes::OK);
             response.set_body(responseBody);
 
@@ -68,12 +86,3 @@ public:
 private:
     http_listener m_listener;
 };
-
-int startBackend() {
-    http_server server;
-    server.start();
-
-    std::string line;
-    std::getline(std::cin, line);
-    return 0;
-}

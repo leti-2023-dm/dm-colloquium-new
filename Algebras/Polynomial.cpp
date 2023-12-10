@@ -11,18 +11,20 @@ Polynomial::Polynomial(std::vector<Rational> coefs) : coefficients(std::move(coe
 }
 
 
-Polynomial::Polynomial(const std::string& poly) {
+Polynomial::Polynomial(const std::string &poly) {
     Polynomial res;
-    std::stringstream stream(poly);
+    std::string temp = poly;
+    temp.erase(std::remove_if(temp.begin(), temp.end(), ::isspace), temp.end());
+    std::stringstream stream(temp);
     std::string tmp;
-    while (getline(stream, tmp, '+')){
+    while (getline(stream, tmp, '+')) {
         size_t xid = tmp.find('x');
-        if (xid == std::string::npos){
+        if (xid == std::string::npos) {
             res = res + Rational(tmp);
             continue;
         }
-        std::string left = tmp.substr(0, xid != 0 && tmp[xid - 1] == '*'? xid - 1 : xid);
-        Rational coef = Rational(!left.empty() ? left: "1");
+        std::string left = tmp.substr(0, xid != 0 && tmp[xid - 1] == '*' ? xid - 1 : xid);
+        Rational coef = Rational(!left.empty() ? left : "1");
         if (xid + 2 >= tmp.size()) {
             res = res + Polynomial(coef, 1);
             continue;
@@ -36,9 +38,7 @@ Polynomial::Polynomial(const std::string& poly) {
     *this = res;
 }
 
-Polynomial::Polynomial(): Polynomial(Rational(0)) {
-
-}
+Polynomial::Polynomial() : Polynomial(Rational(0)) {}
 
 
 Polynomial::Polynomial(const Rational &num, size_t deg) {
@@ -195,6 +195,7 @@ bool Polynomial::operator!=(const Polynomial &other) const {
 }
 
 std::ostream &operator<<(std::ostream &stream, const Polynomial &p) {
+    std::stringstream tempStream;
     auto deg = p.coefficients.size() - 1;
     for (size_t ind = 0; ind <= deg; ind++) {
         const Rational &coefficient = p.coefficients[deg - ind];
@@ -204,14 +205,19 @@ std::ostream &operator<<(std::ostream &stream, const Polynomial &p) {
         // we don't output monomials with zero coefficients
         if (numerator.abs().size() == 1 && numerator[0] == 0) continue;
 
-        if (isNegative) stream << '(';
-        stream << coefficient;
-        if (isNegative) stream << ')';
+        if (isNegative) tempStream << '(';
+        tempStream << coefficient;
+        if (isNegative) tempStream << ')';
 
-        if (deg - ind != 0)
-            stream << " * x^" << std::to_string(deg - ind) << " + ";
+        if (deg - ind != 0) {
+            tempStream << " * x^" << std::to_string(deg - ind);
+            tempStream << " + ";
+        }
+
     }
-
+    std::string temp = tempStream.str();
+    temp = temp.substr(temp.length() - 3) != " + " ? temp : temp.substr(0, temp.length() - 3);
+    stream << temp;
     return stream;
 }
 
